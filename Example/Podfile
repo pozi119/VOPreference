@@ -1,0 +1,11 @@
+platform :ios, '9.0'
+#use_frameworks!
+#inhibit_all_warnings!
+
+target 'VOPreference_Example' do
+  pod 'VOPreference', :path => '../'
+
+  target 'VOPreference_Tests' do
+    inherit! :search_paths
+  end
+end
