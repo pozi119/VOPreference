@@ -6,12 +6,12 @@
 //
 
 #import "VPSegmentedSliderCell.h"
-#import "VPSegmentedSlider.h"
+#import "VPCalibrationSlider.h"
 
 @interface VPSegmentedSliderCell ()
 @property (nonatomic, strong) UILabel *titleLbl;
 @property (nonatomic, strong) UILabel *valueLbl;
-@property (nonatomic, strong) VPSegmentedSlider *slider;
+@property (nonatomic, strong) VPCalibrationSlider *slider;
 @end
 
 @implementation VPSegmentedSliderCell
@@ -20,7 +20,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         [self setupSubviews];
-        [self setupActions];
     }
     return self;
 }
@@ -29,7 +28,7 @@
     [super setEntry:entry];
     self.slider.minimumValue = entry.minValue;
     self.slider.maximumValue = entry.maxValue;
-    self.slider.positionsCount = entry.segmentsCount;
+    self.slider.calibrationCount = entry.segmentsCount;
     self.slider.value = [entry.settingValue floatValue];
     self.titleLbl.text = entry.title;
     self.valueLbl.text = @((NSInteger)self.slider.value).stringValue;
@@ -61,28 +60,14 @@
     frame.origin.y      = 44;
     frame.size.height   = 44;
     frame.size.width    = width - 40;
-    _slider = [[VPSegmentedSlider alloc] initWithFrame: frame];
-    _slider.backgroundColor   = [UIColor whiteColor];
-    //_slider.knobImage = knobViewImage;
-    _slider.trackCornerRadius = 1.0f;
-    _slider.trackColor        = [UIColor colorWithRed:0.00 green:0.50 blue:0.90 alpha:1.00];
-    _slider.backColor         = [UIColor colorWithRed:0.72 green:0.72 blue:0.72 alpha:1.00];
-    _slider.lineSize          = 2.0f;
-    _slider.dotSize           = 5.0f;
-    _slider.minimumValue      = 0.0f;
-    _slider.maximumValue      = 6.0f;
-    _slider.startValue        = 0.0f;
-    _slider.value             = 3.0f;
-    _slider.positionsCount    = 7;
+    _slider = [[VPCalibrationSlider alloc] initWithFrame: frame];
+    _slider.calibrationType = VPCalibrationLine;
+    [_slider addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_slider];
 }
 
-- (void)setupActions{
-    __weak typeof(self) weakSelf = self;
-    [self.slider setInteractionEnded:^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf.entry setSettingValue:@(strongSelf.slider.value)];
-    }];
+- (void)valueChanged:(id)sender{
+    [self.entry setSettingValue:@(self.slider.value)];
 }
 
 @end

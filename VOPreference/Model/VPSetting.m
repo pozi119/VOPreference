@@ -79,38 +79,38 @@
 
 - (NSArray *)groupEntries:(NSArray<VPEntry *> *)entries{
     NSMutableArray *grouped     = [NSMutableArray arrayWithCapacity:0];
-    VPEntry *header             = nil;
-    VPEntry *footer             = nil;
-    NSMutableArray *subEntires  = [NSMutableArray arrayWithCapacity:0];
+    __block VPEntry *header             = nil;
+    __block VPEntry *footer             = nil;
+    __block NSMutableArray *subEntires  = [NSMutableArray arrayWithCapacity:0];
+    
+    void(^addOneGroup)(void) = ^(void) {
+        [grouped addObject:[VPEntryGroup groupWithHeader:header footer:footer entries:subEntires]];
+        header = nil;
+        footer = nil;
+        subEntires = [NSMutableArray arrayWithCapacity:0];
+    };
     
     for (VPEntry *entry in entries) {
-        BOOL addGroup = NO;
         switch (entry.type) {
             case VPEntryTypeGroup: {
-                if(header || subEntires.count > 0){
-                    addGroup = YES;
+                if(header || footer || subEntires.count > 0){
+                    addOneGroup();
                 }
                 header = entry;
             } break;
-             
+                
             case VPEntryTypeGroupFooter:{
                 footer = entry;
-                addGroup = YES;
+                addOneGroup();
             } break;
                 
             default:{
                 [subEntires addObject:entry];
             } break;
         }
-        if(addGroup){
-            [grouped addObject:[VPEntryGroup groupWithHeader:header footer:footer entries:subEntires]];
-            header = nil;
-            footer = nil;
-            subEntires = [NSMutableArray arrayWithCapacity:0];
-        }
     }
     if(header || footer || subEntires.count > 0){
-        [grouped addObject:[VPEntryGroup groupWithHeader:header footer:footer entries:subEntires]];
+        addOneGroup();
     }
     
     return grouped;

@@ -70,17 +70,17 @@
 			<key>Key</key>
 			<string>segmentedslider</string>
 			<key>DefaultValue</key>
-			<integer>2</integer>
+			<integer>14</integer>
 			<key>MinimumValue</key>
-			<integer>0</integer>
+			<integer>10</integer>
 			<key>MaximumValue</key>
-			<integer>5</integer>
+			<integer>20</integer>
 			<key>MinimumValueImage</key>
 			<string></string>
 			<key>MaximumValueImage</key>
 			<string></string>
 			<key>SegmentsCount</key>
-			<string>6</string>
+			<string>5</string>
 		</dict>
 		<dict>
 			<key>Type</key>
