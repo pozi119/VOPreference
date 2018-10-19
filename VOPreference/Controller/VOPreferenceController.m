@@ -28,7 +28,9 @@
     [super viewDidLoad];
     [self setupSubviews];
     [[NSNotificationCenter defaultCenter] addObserverForName:VOPreferenceDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification * note) {
-        [self.tableView reloadData];
+        VPEntry *entry = note.object;
+        if(entry.relativeIndexPaths.count == 0) return;
+        [self.tableView reloadRowsAtIndexPaths:entry.relativeIndexPaths withRowAnimation:UITableViewRowAnimationNone];
     }];
 }
 
@@ -52,6 +54,7 @@
     _tableView.rowHeight = 44;
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     [self registerBuiltInClassesForTableView];
     [self.view addSubview:_tableView];
 }
@@ -137,11 +140,15 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     VPEntryGroup *group = self.groupedEntries[indexPath.section];
     VPEntry *entry = group.entries[indexPath.row];
-    BOOL canSelect = entry.type == VPEntryTypeMultiVal;
-    if (!canSelect) { return; }
-    VPMultiValController *multivalVC = [VPMultiValController new];
-    multivalVC.entry = entry;
-    [self.navigationController pushViewController:multivalVC animated:YES];
+    if(entry.selectionHandler) {
+        entry.selectionHandler(entry);
+    }
+    else{
+        if (entry.type != VPEntryTypeMultiVal) { return; }
+        VPMultiValController *multivalVC = [VPMultiValController new];
+        multivalVC.entry = entry;
+        [self.navigationController pushViewController:multivalVC animated:YES];
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{

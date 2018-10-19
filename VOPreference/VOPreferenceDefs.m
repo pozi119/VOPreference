@@ -46,5 +46,4 @@ NSString *const VP_MinImage      = @"MinimumValueImage";
 //MARK: [自定义]
 NSString *const VP_Segments      = @"SegmentsCount";
 NSString *const VP_CustomCell    = @"CustomCell";
-NSString *const VP_CellAction    = @"CellAction";
 NSString *const VP_ToggleKey     = @"ToggleKey";

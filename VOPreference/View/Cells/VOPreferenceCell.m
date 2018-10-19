@@ -20,4 +20,12 @@
     return self;
 }
 
+- (void)setEntry:(VPEntry *)entry{
+    _entry = entry;
+    if(entry.selectionHandler){
+        self.selectionStyle = UITableViewCellSelectionStyleGray;
+        self.accessoryType  = UITableViewCellAccessoryDisclosureIndicator;
+    }
+}
+
 @end

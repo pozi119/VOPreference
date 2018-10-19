@@ -64,6 +64,38 @@
 		</dict>
 		<dict>
 			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>Value1</string>
+			<key>Key</key>
+			<string>segmentedslider</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>Value1</string>
+			<key>Key</key>
+			<string>segmentedslider</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>Value1</string>
+			<key>Key</key>
+			<string>segmentedslider</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSTitleValueSpecifier</string>
+			<key>Title</key>
+			<string>Value1</string>
+			<key>Key</key>
+			<string>segmentedslider</string>
+		</dict>
+		<dict>
+			<key>Type</key>
 			<string>PSSegmentedSliderSpecifier</string>
 			<key>Title</key>
 			<string>SegmentedSlider</string>
@@ -122,7 +154,9 @@
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
-			<string>hehehe</string>
+			<string>姓名</string>
+			<key>Key</key>
+			<string>name</string>
 		</dict>
 	</array>
 </dict>

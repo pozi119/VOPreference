@@ -68,6 +68,7 @@
 
 - (void)valueChanged:(id)sender{
     [self.entry setSettingValue:@(self.slider.value)];
+    self.valueLbl.text = @((NSInteger)self.slider.value).stringValue;
 }
 
 @end

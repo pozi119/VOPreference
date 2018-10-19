@@ -78,16 +78,20 @@
 }
 
 - (NSArray *)groupEntries:(NSArray<VPEntry *> *)entries{
-    NSMutableArray *grouped     = [NSMutableArray arrayWithCapacity:0];
-    __block VPEntry *header             = nil;
-    __block VPEntry *footer             = nil;
+    NSMutableArray *grouped   = [NSMutableArray arrayWithCapacity:0];
+    __block NSInteger section = 0;
+    __block NSInteger row     = 0;
+    __block VPEntry *header   = nil;
+    __block VPEntry *footer   = nil;
     __block NSMutableArray *subEntires  = [NSMutableArray arrayWithCapacity:0];
-    
+
     void(^addOneGroup)(void) = ^(void) {
         [grouped addObject:[VPEntryGroup groupWithHeader:header footer:footer entries:subEntires]];
         header = nil;
         footer = nil;
         subEntires = [NSMutableArray arrayWithCapacity:0];
+        section ++;
+        row    = 0;
     };
     
     for (VPEntry *entry in entries) {
@@ -105,12 +109,31 @@
             } break;
                 
             default:{
+                entry.indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                row ++;
                 [subEntires addObject:entry];
             } break;
         }
     }
     if(header || footer || subEntires.count > 0){
         addOneGroup();
+    }
+
+    NSUInteger count = entries.count;
+    for (NSInteger i = 0; i < count; i ++) {
+        VPEntry *entryi = entries[i];
+        NSMutableArray *relatives = [NSMutableArray arrayWithCapacity:0];
+        if(entryi.type == VPEntryTypeMultiVal) {
+            [relatives addObject:entryi.indexPath];
+        }
+        for (NSInteger j = 0; j < count; j ++) {
+            if(i == j) continue;
+            VPEntry *entryj = entries[j];
+            if([entryi.key isEqualToString:entryj.key]){
+                [relatives addObject:entryj.indexPath];
+            }
+        }
+        entryi.relativeIndexPaths = [relatives copy];
     }
     
     return grouped;

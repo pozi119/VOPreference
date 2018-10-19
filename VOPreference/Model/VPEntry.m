@@ -19,7 +19,6 @@
     entry.title      = dictionary[VP_Title];
     entry.key        = dictionary[VP_Key];
     entry.defaultVal = dictionary[VP_DefaultValue];
-    entry.cellAction = dictionary[VP_CellAction];
     entry.toggleKey  = dictionary[VP_ToggleKey];
     switch (entry.type) {
         case VPEntryTypeCustom:{
@@ -64,7 +63,7 @@
 - (void)setSettingValue:(id)value{
     self.setting.keyValues[self.key] = value;
     self.setting.setValueForEntryKey(self.key, value);
-    [[NSNotificationCenter defaultCenter] postNotificationName:VOPreferenceDidChangeNotification object:value userInfo:@{@"entry":self}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:VOPreferenceDidChangeNotification object:self userInfo:nil];
 }
 
 + (VPEntryType)entryTypeOf:(NSString *)typeString{

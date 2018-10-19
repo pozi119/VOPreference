@@ -49,5 +49,4 @@ FOUNDATION_EXPORT NSString *const VP_MinImage;
 //MARK: [自定义]
 FOUNDATION_EXPORT NSString *const VP_Segments;
 FOUNDATION_EXPORT NSString *const VP_CustomCell;
-FOUNDATION_EXPORT NSString *const VP_CellAction;
 FOUNDATION_EXPORT NSString *const VP_ToggleKey;

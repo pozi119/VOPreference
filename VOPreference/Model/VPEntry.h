@@ -47,11 +47,15 @@ typedef NS_ENUM(NSUInteger, VPEntryType) {
 @property (nonatomic, assign) CGFloat       minValue;
 @property (nonatomic, copy  ) NSString      *maxValImage;
 @property (nonatomic, copy  ) NSString      *minValImage;
-// 自定义
+// Custom
 @property (nonatomic, assign) NSUInteger    segmentsCount;  ///< SegmentedSlider分段数量
 @property (nonatomic, copy  ) NSString      *customCell;    ///< 自定义Cell的Class名,需继承`VOPreferenceCell`
-@property (nonatomic, copy  ) NSString      *cellAction;    ///< cell点击事件(或其他事件)对应的`Selector`
 @property (nonatomic, copy  ) NSString      *toggleKey;     ///< 对应EntryKey的值为true时才显示
+
+// Action
+@property (nonatomic, copy  ) void  (^selectionHandler)(VPEntry *entry);
+@property (nonatomic, strong) NSIndexPath   *indexPath;
+@property (nonatomic, strong) NSArray       *relativeIndexPaths;
 
 /**
  从字典生成entry对象
