@@ -48,7 +48,7 @@
     [self setNeedsLayout];
 }
 
-- (UIView *)calibrationsViewWithSliderRect:(CGRect)rect{
+- (void)setupCalibrationsViewWithSliderRect:(CGRect)rect{
     BOOL isDot        = _calibrationType == VPCalibrationDot;
     CGSize size       = _calibrationSize;
     
@@ -63,7 +63,7 @@
     frame.origin.y    = (rect.size.height - size.height) / 2;
     frame.size.width  = width;
     frame.size.height = size.height;
-    UIView *view = [[UIView alloc] initWithFrame:frame];
+    UIView *view      = [[UIView alloc] initWithFrame:frame];
     
     // 计算并设置Calibration Layer
     CGFloat radius      = MIN(size.width, size.height) / 2.0f;
@@ -97,7 +97,7 @@
     }
     self.calibrationLayers = [calibrationLayers copy];
     [self setupCalibrationLayersColor];
-    return view;
+    self.calibrationsView = view;
 }
 
 - (void)setupCalibrationLayersColor{
@@ -116,7 +116,7 @@
     [self.calibrationsView removeFromSuperview];
     if(_calibrationCount > 0){
         UIView *minView  = self.subviews[1];
-        self.calibrationsView = [self calibrationsViewWithSliderRect:rect];
+        [self setupCalibrationsViewWithSliderRect:rect];
         [self insertSubview:self.calibrationsView aboveSubview:minView];
     }
 }

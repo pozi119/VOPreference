@@ -28,6 +28,7 @@
     _tableView.rowHeight = 44;
     _tableView.dataSource = self;
     _tableView.delegate = self;
+    _tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 20)];
     [self.view addSubview:_tableView];
 }
 
@@ -37,15 +38,15 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *cellVal = self.entry.values[indexPath.row];
+    NSString *cellVal        = self.entry.values[indexPath.row];
     static NSString *reuseId = @"VOMuitlValItemCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseId];
+    UITableViewCell *cell    = [tableView dequeueReusableCellWithIdentifier:reuseId];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseId];
     }
     cell.textLabel.text = indexPath.row < self.entry.titles.count? self.entry.titles[indexPath.row] : @"";
-    BOOL checkmarked = [cellVal isEqualToString:[NSString stringWithFormat:@"%@", self.entry.settingValue]];
-    cell.accessoryType = checkmarked? UITableViewCellAccessoryCheckmark:UITableViewCellAccessoryNone;
+    BOOL checkmarked    = [cellVal isEqualToString:[NSString stringWithFormat:@"%@", self.entry.settingValue]];
+    cell.accessoryType  = checkmarked? UITableViewCellAccessoryCheckmark:UITableViewCellAccessoryNone;
     return cell;
 }
 

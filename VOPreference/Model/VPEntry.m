@@ -14,18 +14,24 @@
 + (instancetype)entryWithDictionary:(NSDictionary *)dictionary{
     if (!dictionary || !dictionary[VP_Type]) return nil;
     VPEntry *entry   = [VPEntry new];
-    entry.typeString = dictionary[VP_Type];
-    entry.type       = [self entryTypeOf:entry.typeString];
+    entry.type       = [self entryTypeOf:dictionary[VP_Type]];
     entry.title      = dictionary[VP_Title];
     entry.key        = dictionary[VP_Key];
     entry.defaultVal = dictionary[VP_DefaultValue];
     entry.toggleKey  = dictionary[VP_ToggleKey];
+    entry.foregroundColor  = [self colorWithHexStr: dictionary[VP_ForegroundColor]];
+    entry.backgroundColor  = [self colorWithHexStr: dictionary[VP_BackgroundColor]];
+    entry.cellClass  = [self cellClassOf:entry.type];
+    if(entry.cellClass.length == 0){
+        entry.cellClass = dictionary[VP_CellClass];
+    }
     switch (entry.type) {
         case VPEntryTypeCustom:{
-            entry.customCell = dictionary[VP_CustomCell];
+            entry.cellClass = dictionary[VP_CellClass];
         } break;
             
-        case VPEntryTypeMultiVal:{
+        case VPEntryTypeMultiVal:
+        case VPEntryTypeSegmentedControl:{
             entry.titles = dictionary[VP_Titles];
             entry.values = dictionary[VP_Values];
         } break;
@@ -38,14 +44,16 @@
         } break;
             
         case VPEntryTypeSlider:
-        case VPEntryTypeSegmentedSlider:{
-            entry.maxValue    = [dictionary[VP_MaxVal] floatValue];
-            entry.minValue    = [dictionary[VP_MinVal] floatValue];
-            entry.maxValImage = dictionary[VP_MaxImage];
-            entry.minValImage = dictionary[VP_MinImage];
-            if(entry.type == VPEntryTypeSegmentedSlider){
-                entry.segmentsCount = [dictionary[VP_Segments] integerValue];
-            }
+        case VPEntryTypeSegmentedSlider:
+        case VPEntryTypeSteper:
+        case VPEntryTypeDatePicker:{
+            entry.maxValue       = dictionary[VP_MaxVal];
+            entry.minValue       = dictionary[VP_MinVal];
+            entry.maxValImage    = dictionary[VP_MaxImage];
+            entry.minValImage    = dictionary[VP_MinImage];
+            entry.segmentsCount  = [dictionary[VP_Segments] integerValue]; // segmentedSlider
+            entry.stepValue      = [dictionary[VP_StepVal] floatValue];    // stepper
+            entry.datePickerMode = [dictionary[VP_DatePickerMode] integerValue];  // datePicker
         }
         
         default:
@@ -66,19 +74,39 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:VOPreferenceDidChangeNotification object:self userInfo:nil];
 }
 
++ (NSString *)cellClassOf:(VPEntryType)type{
+    NSDictionary *map = @{@(VPEntryTypeTitle)           : @"VPTitleCell",
+                          @(VPEntryTypeMultiVal)        : @"VPMultiValCell",
+                          @(VPEntryTypeTextField)       : @"VPTextFieldCell",
+                          @(VPEntryTypeSwitch)          : @"VPSwitchCell",
+                          @(VPEntryTypeSlider)          : @"VPSliderCell",
+                          
+                          @(VPEntryTypeButton)          : @"VPButtonCell",
+                          @(VPEntryTypeSteper)          : @"VPStepperCell",
+                          @(VPEntryTypeDatePicker)      : @"VPDatePickerCell",
+                          @(VPEntryTypeSegmentedControl): @"VPSegmentedControlCell",
+                          @(VPEntryTypeSegmentedSlider) : @"VPSegmentedSliderCell"};
+    return map[@(type)];
+}
+
 + (VPEntryType)entryTypeOf:(NSString *)typeString{
-    NSDictionary *map = @{VPType_Group           : @(VPEntryTypeGroup),
-                          
-                          VPType_Title           : @(VPEntryTypeTitle),
-                          VPType_MulitVal        : @(VPEntryTypeMultiVal),
-                          VPType_TextField       : @(VPEntryTypeTextField),
-                          VPType_Switch          : @(VPEntryTypeSwitch),
-                          VPType_Slider          : @(VPEntryTypeSlider),
-                          VPType_Button          : @(VPEntryTypeButton),
-                          
-                          VPType_SegmentedSlider : @(VPEntryTypeSegmentedSlider),
-                          VPType_GroupFooter     : @(VPEntryTypeGroupFooter)};
-    
+    NSDictionary *map = @{
+                          // 兼容Setting.bundle
+                          @"PSGroupSpecifier"           : @(VPEntryTypeGroup),
+                          @"PSTitleValueSpecifier"      : @(VPEntryTypeTitle),
+                          @"PSMultiValueSpecifier"      : @(VPEntryTypeMultiVal),
+                          @"PSTextFieldSpecifier"       : @(VPEntryTypeTextField),
+                          @"PSToggleSwitchSpecifier"    : @(VPEntryTypeSwitch),
+                          @"PSSliderSpecifier"          : @(VPEntryTypeSlider),
+                          // 自定义
+                          @"PSCustomSpecifier"          : @(VPEntryTypeCustom),
+                          @"PSButtonSpecifier"          : @(VPEntryTypeButton),
+                          @"PSStepperSpecifier"         : @(VPEntryTypeSteper),
+                          @"PSDatePickerSpecifier"      : @(VPEntryTypeDatePicker),
+                          @"PSSegmentedControlSpecifier": @(VPEntryTypeSegmentedControl),
+                          @"PSGroupFooterSpecifier"     : @(VPEntryTypeGroupFooter),
+                          @"PSSegmentedSliderSpecifier" : @(VPEntryTypeSegmentedSlider)};
+
     return [self typeOf:typeString map:map defaultVal:VPEntryTypeCustom];
 }
 
@@ -115,6 +143,17 @@
         if(num) type = num.unsignedIntegerValue;
     }
     return type;
+}
+
++ (UIColor *)colorWithHexStr:(NSString *)hex {
+    if (hex.length > 0) {
+        int lcolorint =  (int)strtoul([hex UTF8String], 0, 16);
+        return [UIColor colorWithRed:((float)((lcolorint & 0xFF0000) >> 16))/255.0
+                               green:((float)((lcolorint & 0xFF00) >> 8))/255.0
+                                blue:((float)(lcolorint & 0xFF))/255.0
+                               alpha:1.0];
+    }
+    return nil;
 }
 
 @end

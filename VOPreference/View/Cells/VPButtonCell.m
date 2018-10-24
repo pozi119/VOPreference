@@ -25,7 +25,15 @@
 
 - (void)setEntry:(VPEntry *)entry{
     [super setEntry:entry];
-    self.textLabel.text = entry.title;
+    self.textLabel.text      = entry.title;
+    UIColor *backgroundColor = self.backgroundColor;
+    backgroundColor          = entry.backgroundColor ? : backgroundColor;
+    UIColor *textColor       = entry.foregroundColor;
+    if(!textColor && backgroundColor){
+        textColor = [UIColor whiteColor];
+    }
+    self.backgroundColor     = backgroundColor;
+    self.textLabel.textColor = textColor;
 }
 
 @end

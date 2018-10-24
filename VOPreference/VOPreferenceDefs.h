@@ -12,20 +12,6 @@
 //MARK: - 通知
 FOUNDATION_EXPORT NSString *const VOPreferenceDidChangeNotification;
 
-//MARK: - 配置项类型 [兼容iOS Setting.bundle]
-FOUNDATION_EXPORT NSString *const VPType_Group;
-FOUNDATION_EXPORT NSString *const VPType_Title;
-FOUNDATION_EXPORT NSString *const VPType_MulitVal;
-FOUNDATION_EXPORT NSString *const VPType_TextField;
-FOUNDATION_EXPORT NSString *const VPType_Switch;
-FOUNDATION_EXPORT NSString *const VPType_Slider;
-
-//MARK: [自定义]
-FOUNDATION_EXPORT NSString *const VPType_Button;
-FOUNDATION_EXPORT NSString *const VPType_Custom;
-FOUNDATION_EXPORT NSString *const VPType_GroupFooter;
-FOUNDATION_EXPORT NSString *const VPType_SegmentedSlider;
-
 //MARK: - Plist文件的Key [兼容iOS Setting.bundle]
 // 公用
 FOUNDATION_EXPORT NSString *const VP_Type;
@@ -48,5 +34,9 @@ FOUNDATION_EXPORT NSString *const VP_MinImage;
 
 //MARK: [自定义]
 FOUNDATION_EXPORT NSString *const VP_Segments;
-FOUNDATION_EXPORT NSString *const VP_CustomCell;
+FOUNDATION_EXPORT NSString *const VP_CellClass;
 FOUNDATION_EXPORT NSString *const VP_ToggleKey;
+FOUNDATION_EXPORT NSString *const VP_StepVal;
+FOUNDATION_EXPORT NSString *const VP_DatePickerMode;
+FOUNDATION_EXPORT NSString *const VP_ForegroundColor;
+FOUNDATION_EXPORT NSString *const VP_BackgroundColor;

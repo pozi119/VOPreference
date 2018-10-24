@@ -42,9 +42,27 @@
 		</dict>
 		<dict>
 			<key>Type</key>
+			<string>PSStepperSpecifier</string>
+			<key>Title</key>
+			<string>数字</string>
+			<key>Key</key>
+			<string>stepper</string>
+			<key>DefaultValue</key>
+			<integer>1</integer>
+			<key>MinimumValue</key>
+			<integer>0</integer>
+			<key>MaximumValue</key>
+			<integer>100</integer>
+			<key>StepValue</key>
+			<real>2.5</real>
+		</dict>
+		<dict>
+			<key>Type</key>
 			<string>PSSliderSpecifier</string>
 			<key>Key</key>
 			<string>slider</string>
+			<key>Title</key>
+			<string>比例</string>
 			<key>DefaultValue</key>
 			<real>0.5</real>
 			<key>MinimumValue</key>
@@ -55,6 +73,38 @@
 			<string></string>
 			<key>MaximumValueImage</key>
 			<string></string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSDatePickerSpecifier</string>
+			<key>Title</key>
+			<string>日期</string>
+			<key>Key</key>
+			<string>date</string>
+			<key>DefaultValue</key>
+			<date>2018-10-10T05:43:44Z</date>
+			<key>MinimumValue</key>
+			<date>2018-10-24T05:43:20Z</date>
+			<key>MaximumValue</key>
+			<date>2018-10-31T05:43:23Z</date>
+			<key>DatePickerMode</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSDatePickerSpecifier</string>
+			<key>Title</key>
+			<string>时间</string>
+			<key>Key</key>
+			<string>time</string>
+			<key>DefaultValue</key>
+			<date>2018-10-10T06:43:44Z</date>
+			<key>MinimumValue</key>
+			<date>2018-10-24T05:43:20Z</date>
+			<key>MaximumValue</key>
+			<date>2018-10-31T08:43:23Z</date>
+			<key>DatePickerMode</key>
+			<integer>0</integer>
 		</dict>
 		<dict>
 			<key>Type</key>
@@ -74,7 +124,7 @@
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
-			<string>Value1</string>
+			<string>Value2</string>
 			<key>Key</key>
 			<string>segmentedslider</string>
 		</dict>
@@ -82,15 +132,17 @@
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
-			<string>Value1</string>
+			<string>Value3</string>
 			<key>Key</key>
 			<string>segmentedslider</string>
+			<key>ToggleKey</key>
+			<string>enabled</string>
 		</dict>
 		<dict>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
-			<string>Value1</string>
+			<string>Value4</string>
 			<key>Key</key>
 			<string>segmentedslider</string>
 		</dict>
@@ -146,17 +198,41 @@
 		</dict>
 		<dict>
 			<key>Type</key>
+			<string>PSSegmentedControlSpecifier</string>
+			<key>Title</key>
+			<string>分段</string>
+			<key>Key</key>
+			<string>segmentedcontrol</string>
+			<key>DefaultValue</key>
+			<string>1</string>
+			<key>Titles</key>
+			<array>
+				<string>1</string>
+				<string>2</string>
+				<string>3</string>
+				<string>4</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>1</string>
+				<string>2</string>
+				<string>3</string>
+				<string>4</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
 			<string>Group3</string>
 		</dict>
 		<dict>
 			<key>Type</key>
-			<string>PSTitleValueSpecifier</string>
+			<string>PSButtonSpecifier</string>
 			<key>Title</key>
-			<string>姓名</string>
-			<key>Key</key>
-			<string>name</string>
+			<string>退出登录</string>
+			<key>BackgroundColor</key>
+			<string>007EE5</string>
 		</dict>
 	</array>
 </dict>

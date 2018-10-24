@@ -10,19 +10,6 @@
 //MARK: - 通知
 NSString *const VOPreferenceDidChangeNotification  = @"VOPreferenceDidChangeNotification";
 
-//MARK: - 配置项类型 [兼容iOS Setting.bundle]
-NSString *const VPType_Group     = @"PSGroupSpecifier";
-NSString *const VPType_Title     = @"PSTitleValueSpecifier";
-NSString *const VPType_MulitVal  = @"PSMultiValueSpecifier";
-NSString *const VPType_TextField = @"PSTextFieldSpecifier";
-NSString *const VPType_Switch    = @"PSToggleSwitchSpecifier";
-NSString *const VPType_Slider    = @"PSSliderSpecifier";
-//MARK: [自定义]
-NSString *const VPType_Button    = @"PSButtonSpecifier";
-NSString *const VPType_Custom    = @"PSCustomSpecifier";
-NSString *const VPType_GroupFooter     = @"PSGroupFooterSpecifier";
-NSString *const VPType_SegmentedSlider = @"PSSegmentedSliderSpecifier";
-
 //MARK: - Plist文件的Key [兼容iOS Setting.bundle]
 // 公用
 NSString *const VP_Type          = @"Type";
@@ -45,5 +32,9 @@ NSString *const VP_MinImage      = @"MinimumValueImage";
 
 //MARK: [自定义]
 NSString *const VP_Segments      = @"SegmentsCount";
-NSString *const VP_CustomCell    = @"CustomCell";
+NSString *const VP_CellClass     = @"CellClass";
 NSString *const VP_ToggleKey     = @"ToggleKey";
+NSString *const VP_StepVal       = @"StepValue";
+NSString *const VP_DatePickerMode  = @"DatePickerMode";
+NSString *const VP_ForegroundColor = @"ForegroundColor";
+NSString *const VP_BackgroundColor = @"BackgroundColor";

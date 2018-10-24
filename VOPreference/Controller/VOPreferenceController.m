@@ -26,11 +26,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setupSubviews];
     [[NSNotificationCenter defaultCenter] addObserverForName:VOPreferenceDidChangeNotification object:nil queue:nil usingBlock:^(NSNotification * note) {
         VPEntry *entry = note.object;
         if(entry.relativeIndexPaths.count == 0) return;
-        [self.tableView reloadRowsAtIndexPaths:entry.relativeIndexPaths withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadRowsAtIndexPaths:entry.relativeIndexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
     }];
 }
 
@@ -45,37 +44,30 @@
     [self.tableView reloadData];
 }
 
-- (void)setupSubviews{
-    CGRect rect = self.view.bounds;
-    _tableView = [[UITableView alloc] initWithFrame:rect style:UITableViewStyleGrouped];
-    _tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 0.1f)];
-    _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 50)];
-    _tableView.sectionFooterHeight = 0;
-    _tableView.rowHeight = 44;
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
-    [self registerBuiltInClassesForTableView];
-    [self.view addSubview:_tableView];
-}
-
-- (void)registerBuiltInClassesForTableView{
-    [_tableView registerClass:[VPTitleCell class] forCellReuseIdentifier:VPType_Title];
-    [_tableView registerClass:[VPMultiValCell class] forCellReuseIdentifier:VPType_MulitVal];
-    [_tableView registerClass:[VPTextFieldCell class] forCellReuseIdentifier:VPType_TextField];
-    [_tableView registerClass:[VPSwitchCell class] forCellReuseIdentifier:VPType_Switch];
-    [_tableView registerClass:[VPSliderCell class] forCellReuseIdentifier:VPType_Slider];
-    [_tableView registerClass:[VPButtonCell class] forCellReuseIdentifier:VPType_Button];
-    [_tableView registerClass:[VPSegmentedSliderCell class] forCellReuseIdentifier:VPType_SegmentedSlider];
+- (UITableView *)tableView{
+    if (!_tableView) {
+        CGRect rect = self.view.bounds;
+        _tableView = [[UITableView alloc] initWithFrame:rect style:UITableViewStyleGrouped];
+        _tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 0.1f)];
+        _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 50)];
+        _tableView.sectionFooterHeight = 0;
+        _tableView.rowHeight = 44;
+        _tableView.dataSource = self;
+        _tableView.delegate = self;
+        _tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+        [self.view addSubview:_tableView];
+    }
+    return _tableView;
 }
 
 - (void)registerCustomClassesForTableView{
+    [self.tableView registerClass:VPTitleCell.class forCellReuseIdentifier:NSStringFromClass(VPTitleCell.class)];
     for (VPEntryGroup *group in self.groupedEntries) {
         for (VPEntry *entry in group.entries) {
-            if(entry.type == VPEntryTypeCustom && entry.customCell.length > 0 && entry.typeString.length > 0){
-                Class cellClass = NSClassFromString(entry.customCell);
-                if(cellClass && [cellClass isKindOfClass:VOPreferenceCell.class]){
-                    [_tableView registerClass:cellClass forCellReuseIdentifier:entry.typeString];
+            if(entry.cellClass.length > 0){
+                Class cellClass = NSClassFromString(entry.cellClass);
+                if(cellClass && [cellClass isSubclassOfClass:VOPreferenceCell.class]){
+                    [self.tableView registerClass:cellClass forCellReuseIdentifier:entry.cellClass];
                 }
             }
         }
@@ -95,20 +87,21 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     VPEntryGroup *group = self.groupedEntries[indexPath.section];
     VPEntry *entry = group.entries[indexPath.row];
-    BOOL classValid = YES;
-    if(entry.type == VPEntryTypeCustom){
-        Class cellClass = NSClassFromString(entry.customCell);
-        classValid = cellClass && [cellClass isKindOfClass:VOPreferenceCell.class];
-    }
-    NSString *reuseId = (classValid && entry.typeString.length > 0) ? entry.typeString : VPType_Title;
+    NSString *reuseId = entry.cellClass;
     VOPreferenceCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseId forIndexPath:indexPath];
+    NSAssert(cell != nil, @"`dequeueReusableCellWithIdentifier`失败,请检查配置文件");
     cell.entry = entry;
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    VOPreferenceCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell ? cell.cellHeight : 44;
+    VPEntryGroup *group = self.groupedEntries[indexPath.section];
+    VPEntry *entry = group.entries[indexPath.row];
+    NSString *toggleKey = entry.toggleKey;
+    BOOL hidden = (toggleKey.length > 0 && [self.setting.keyValues[toggleKey] integerValue] == 0);
+    Class cellClass = NSClassFromString(entry.cellClass);
+    if(hidden || ![cellClass isSubclassOfClass:VOPreferenceCell.class]) return 0;
+    return [cellClass height:entry.spread];
 }
 
 - (CGFloat)heightForHeaderFooterText:(NSString *)text fontSize:(CGFloat)fontSize{

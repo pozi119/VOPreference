@@ -14,7 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VOPreferenceCell : UITableViewCell
 @property (nonatomic, strong) VPEntry *entry;
-@property (nonatomic, assign) CGFloat cellHeight;
+
++ (CGFloat)height:(BOOL)spread;
+
 @end
 
 NS_ASSUME_NONNULL_END

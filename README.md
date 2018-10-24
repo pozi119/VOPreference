@@ -5,6 +5,19 @@
 [![License](https://img.shields.io/cocoapods/l/VOPreference.svg?style=flat)](https://cocoapods.org/pods/VOPreference)
 [![Platform](https://img.shields.io/cocoapods/p/VOPreference.svg?style=flat)](https://cocoapods.org/pods/VOPreference)
 
+## Feature
+* [x] Group header, group footer
+* [x] Text
+* [x] Multiple Values
+* [x] TextField
+* [x] ToggleSwitch
+* [x] Slider
+* [x] Button
+* [x] Stepper with value
+* [x] Date/Time Picker
+* [x] Segmented control
+* [x] Segmented Slider
+
 ## Usage
 
 1. 使用XCode文件模板,添加setting.bundle

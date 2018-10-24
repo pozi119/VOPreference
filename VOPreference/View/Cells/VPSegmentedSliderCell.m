@@ -7,11 +7,12 @@
 
 #import "VPSegmentedSliderCell.h"
 #import "VPCalibrationSlider.h"
+#import "NSNumber+VOPreference.h"
 
 @interface VPSegmentedSliderCell ()
-@property (nonatomic, strong) UILabel *titleLbl;
-@property (nonatomic, strong) UILabel *valueLbl;
-@property (nonatomic, strong) VPCalibrationSlider *slider;
+@property (nonatomic, strong) UILabel               *titleLbl;
+@property (nonatomic, strong) UILabel               *valueLbl;
+@property (nonatomic, strong) VPCalibrationSlider   *slider;
 @end
 
 @implementation VPSegmentedSliderCell
@@ -24,19 +25,21 @@
     return self;
 }
 
++ (CGFloat)height:(BOOL)spread{
+    return 88.0f;
+}
+
 - (void)setEntry:(VPEntry *)entry{
     [super setEntry:entry];
-    self.slider.minimumValue = entry.minValue;
-    self.slider.maximumValue = entry.maxValue;
+    self.slider.minimumValue = [entry.minValue floatValue];
+    self.slider.maximumValue = [entry.maxValue floatValue];
     self.slider.calibrationCount = entry.segmentsCount;
     self.slider.value = [entry.settingValue floatValue];
     self.titleLbl.text = entry.title;
-    self.valueLbl.text = @((NSInteger)self.slider.value).stringValue;
+    self.valueLbl.text = @(self.slider.value).vp_stringValue;
 }
 
 - (void)setupSubviews{
-    self.cellHeight     = 88.f;
-    
     CGRect frame        = self.bounds;
     CGFloat width       = [UIScreen mainScreen].bounds.size.width;
     frame.origin.x      = 20;
@@ -52,7 +55,7 @@
     frame.size.width    = 100;
     _valueLbl           = [[UILabel alloc] initWithFrame:frame];
     _valueLbl.font      = [UIFont systemFontOfSize:17];
-    _valueLbl.textColor = [UIColor darkGrayColor];
+    _valueLbl.textColor = [UIColor grayColor];
     _valueLbl.textAlignment = NSTextAlignmentRight;
     [self addSubview:_valueLbl];
 
@@ -66,9 +69,9 @@
     [self addSubview:_slider];
 }
 
-- (void)valueChanged:(id)sender{
-    [self.entry setSettingValue:@(self.slider.value)];
-    self.valueLbl.text = @((NSInteger)self.slider.value).stringValue;
+- (void)valueChanged:(VPCalibrationSlider *)sender{
+    [self.entry setSettingValue:@(sender.value)];
+    self.valueLbl.text = @(sender.value).vp_stringValue;
 }
 
 @end

@@ -24,20 +24,21 @@
 
 - (void)setupSubviews{
     _textField = [[UITextField alloc] initWithFrame:self.bounds];
+    _textField.textAlignment = NSTextAlignmentRight;
     _textField.delegate = self;
     self.accessoryView = _textField;
 }
 
 - (void)setEntry:(VPEntry *)entry{
     [super setEntry:entry];
-    NSString *val = [entry settingValue];
-    self.textLabel.text = entry.title;
-    _textField.secureTextEntry = entry.secureTextEntry;
-    _textField.keyboardType = entry.keyboardType;
+    self.textLabel.text               = entry.title;
+    _textField.secureTextEntry        = entry.secureTextEntry;
+    _textField.keyboardType           = entry.keyboardType;
     _textField.autocapitalizationType = entry.autocapitalizationType;
-    _textField.autocorrectionType = entry.autocorrectionType;
-    _textField.placeholder = entry.title;
-    _textField.text = val;
+    _textField.autocorrectionType     = entry.autocorrectionType;
+    _textField.placeholder            = entry.title;
+    _textField.text                   = entry.settingValue;
+    _textField.textColor              = entry.foregroundColor ? : [UIColor grayColor];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{

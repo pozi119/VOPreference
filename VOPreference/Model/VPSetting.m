@@ -13,7 +13,7 @@
 @property (nonatomic, strong) NSMutableDictionary     *keyValues;
 @property (nonatomic, strong) NSString                *entriesFilePath;
 @property (nonatomic, strong) NSArray<VPEntryGroup *> *groupedEntires;
-
+@property (nonatomic, strong) NSDictionary<NSIndexPath *,VPEntry *> *entryMap;
 @end
 
 @implementation VPSetting{
@@ -22,6 +22,7 @@
     NSArray<VPEntryGroup *> *_groupedEntires;
 }
 
+//MARK: - Public
 - (instancetype)initWithEntiresFile:(NSString *)entriesFilePath{
     self = [super init];
     if (self) {
@@ -40,10 +41,15 @@
     return self;
 }
 
+- (VPEntry *)entryForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return self.entryMap[indexPath];
+}
+
 - (NSString *)entriesFilePath{
     return _entriesFilePath;
 }
 
+//MARK: - Getter/Setter
 - (NSArray *)entries{
     if (!_entries) {
         _entries = [self entriesWithContentsOfFile:self.entriesFilePath];
@@ -58,6 +64,19 @@
     return _groupedEntires;
 }
 
+- (NSDictionary<NSIndexPath *,VPEntry *> *)entryMap{
+    if (!_entryMap) {
+        NSMutableDictionary *map = [NSMutableDictionary dictionaryWithCapacity:0];
+        for (VPEntryGroup *group in self.groupedEntires) {
+            for (VPEntry *entry in group.entries) {
+                map[entry.indexPath] = entry;
+            }
+        }
+        _entryMap = [map copy];
+    }
+    return _entryMap;
+}
+
 - (NSMutableDictionary *)keyValues{
     if (!_keyValues) {
         _keyValues = [self settingsOfEntries:self.entries];
@@ -65,6 +84,7 @@
     return _keyValues;
 }
 
+//MARK: - Private
 - (NSArray *)entriesWithContentsOfFile:(NSString *)path{
     NSDictionary *dictinary    = [NSDictionary dictionaryWithContentsOfFile:path];
     NSArray *array             = dictinary[@"PreferenceSpecifiers"];
@@ -129,7 +149,7 @@
         for (NSInteger j = 0; j < count; j ++) {
             if(i == j) continue;
             VPEntry *entryj = entries[j];
-            if([entryi.key isEqualToString:entryj.key]){
+            if([entryi.key isEqualToString:entryj.key] || [entryi.key isEqualToString:entryj.toggleKey]){
                 [relatives addObject:entryj.indexPath];
             }
         }

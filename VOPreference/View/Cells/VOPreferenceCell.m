@@ -15,7 +15,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.cellHeight     = 44.f;
+        self.clipsToBounds  = YES;
     }
     return self;
 }
@@ -26,6 +26,10 @@
         self.selectionStyle = UITableViewCellSelectionStyleGray;
         self.accessoryType  = UITableViewCellAccessoryDisclosureIndicator;
     }
+}
+
++ (CGFloat)height:(BOOL)spread{
+    return 44.0f;
 }
 
 @end
